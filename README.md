@@ -1,8 +1,8 @@
-# get_iplayer PVR Docker image
+# get_iplayer PVR Docker image for Raspberry Pi
 
-This is a smallish (100MB) Docker image that hosts the [get_iplayer](https://github.com/get-iplayer/get_iplayer/wiki) PVR. It automatically keeps itself up-to-date with the latest version of get_iplayer.
+This is a Docker image based on Raspbian (armhf) that hosts the [get_iplayer](https://github.com/get-iplayer/get_iplayer/wiki) PVR. It automatically keeps itself up-to-date with the latest version of get_iplayer from the packages.hedgerows.org.uk repository.
 
-The PVR recording feature runs hourly. The get_iplayer version is updated daily.
+The PVR recording feature runs hourly. The get_iplayer version is updated daily using apt-get.
 
 ## Image configuration
 
@@ -36,3 +36,7 @@ Refer to the file [options.sample](https://raw.githubusercontent.com/Marginal/do
 2. If you have a `.get_iplayer/options` file, open it in a text editor and remove any `output`, `outputradio` and/or `outputtv` statements.
 
 3. Open the file `.get_iplayer/download_history` in a text editor, search for "/old/destination/folder/" and globally replace with "`/output/`".
+
+## Licences
+
+Contains a compiled version of su-exec, licensed under the MIT licence (https://github.com/ncopa/su-exec/).

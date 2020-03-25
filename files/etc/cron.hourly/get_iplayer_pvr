@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# Run pvr
+#
+umask 2
+su-exec $PUID:$PGID /usr/bin/get_iplayer --pvr --quiet 2>> /var/log/get_iplayer.log

@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# Check for get_iplayer update.
+# When updating will kill any active downloads launched from web front-end, but not those launched by hourly background PVR.
+#
+(
+    apt-get update
+    apt-get install --only-upgrade --no-install-recommends -y get-iplayer
+    rm -rf /var/lib/apt/lists/*
+) 2>> /var/log/get_iplayer_update.log

@@ -1,25 +1,24 @@
-FROM alpine:latest
-MAINTAINER Jonathan Harris <jonathan@marginal.org.uk>
+FROM raspbian/stretch:latest
+MAINTAINER Andrew Mathieson <aim29@users.noreply.github.com>
 ENV GETIPLAYER_OUTPUT=/output GETIPLAYER_PROFILE=/output/.get_iplayer PUID=1000 PGID=100 PORT=1935 BASEURL=
 EXPOSE $PORT
 VOLUME "$GETIPLAYER_OUTPUT"
 
-RUN apk --update --no-cache add ffmpeg perl-cgi perl-mojolicious perl-lwp-protocol-https perl-xml-libxml jq logrotate su-exec tini
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-armhf /tini
+RUN chmod +x /tini
 
-RUN wget -qnd "https://bitbucket.org/shield007/atomicparsley/raw/68337c0c05ec4ba2ad47012303121aaede25e6df/downloads/build_linux_x86_64/AtomicParsley" && \
-    install -m 755 -t /usr/local/bin ./AtomicParsley && \
-    rm ./AtomicParsley
-
-RUN wget -qO - "https://api.github.com/repos/get-iplayer/get_iplayer/releases/latest" > /tmp/latest.json && \
-    echo get_iplayer release `jq -r .name /tmp/latest.json` && \
-    wget -qO - "`jq -r .tarball_url /tmp/latest.json`" | tar -zxf - && \
-    cd get-iplayer* && \
-    install -m 755 -t /usr/local/bin ./get_iplayer ./get_iplayer.cgi && \
-    cd / && \
-    rm -rf get-iplayer* && \
-    rm /tmp/latest.json
+RUN apt-get update && \
+    apt-get install -y apt-transport-https logrotate cron syslogd --no-install-recommends && \
+    wget -qO - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x4C5653EB93401EAECAF6B28E8B07C4FF0F5BFDFE" | apt-key add - && \
+    wget -qO - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x5690DA116DE2A66298231BCA0315CB6C13924333" | sudo apt-key add - && \
+    echo "deb https://packages.hedgerows.org.uk/raspbian stable/" | sudo tee /etc/apt/sources.list.d/packages.hedgerows.org.uk.list && \
+    echo "deb-src https://packages.hedgerows.org.uk/raspbian stable/" | sudo tee -a /etc/apt/sources.list.d/packages.hedgerows.org.uk.list && \
+    apt-get update && \
+    apt-get install -y get-iplayer --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY files/ /
 
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD /start
+ENTRYPOINT ["/tini", "--"]
+CMD ["/start"]
