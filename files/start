@@ -3,6 +3,9 @@
 # Docker entrypoint
 #
 
+# Set up environment
+printenv > /etc/environment
+
 # Ensure up-to-date
 /etc/cron.daily/get_iplayer_update
 
