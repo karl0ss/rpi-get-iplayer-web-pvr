@@ -19,7 +19,7 @@ If you're running behind a reverse proxy set the environment variable `BASEURL` 
 This makes the PVR available on port 1935, and makes downloaded files owned by the current user:
 
 ```sh
-docker run -d -e PUID=`id -u` -e PGID=`id -g` -p 1935:1935 -v /destination/on/host:/output marginal/get_iplayer:latest
+docker run -d -e PUID=`id -u` -e PGID=`id -g` -p 1935:1935 -v /destination/on/host:/output amathieson/rpi-get-iplayer-web-pvr:latest
 ```
 Replace `/destination/on/host` with the path of a folder on the host machine where you would like the downloaded files to be placed.
 
@@ -27,7 +27,7 @@ Replace `/destination/on/host` with the path of a folder on the host machine whe
 
 get_iplayer's configuration and cache will be written to the `.get_iplayer` subfolder under the `/output` bind mount. You can set get_iplayer [options](https://github.com/get-iplayer/get_iplayer/wiki/options) in the file `/destination/on/host/.get_iplayer/options`.
 
-Refer to the file [options.sample](https://raw.githubusercontent.com/Marginal/docker-get_iplayer/master/options.sample) for examples.
+Refer to the file [options.sample](https://raw.githubusercontent.com/aim29/rpi-get-iplayer-web-pvr/master/options.sample) for examples.
 
 ## Migrating an existing get_iplayer installation
 
